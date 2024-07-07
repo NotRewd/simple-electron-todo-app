@@ -107,7 +107,7 @@ h2 {
   margin: 0;
   list-style: none;
   overflow-y: scroll;
-  max-height: 100%;
+  max-height: inherit;
   scrollbar-width: none;
 }
 
@@ -115,6 +115,10 @@ h2 {
   border: none;
   border-bottom: 1px solid #ccc;
   padding: 5px;
+}
+
+.todo-list-active {
+  background-color: lightgray;
 }
 
 .todo-list-item:hover {

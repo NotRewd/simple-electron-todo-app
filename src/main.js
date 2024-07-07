@@ -1,5 +1,7 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
-const { readdirSync, readFileSync } = require('fs');
+const { readdirSync, readFileSync, writeFileSync } = require('fs');
+
+let todoFolder = '';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -14,8 +16,8 @@ async function handleLoadTodosFromFolder () {
   );
 
   if (!canceled) {
-    const directoryPath = filePaths[0];
-    const files = readdirSync(directoryPath);
+    todoFolder = filePaths[0];
+    const files = readdirSync(todoFolder);
 
     let todosJson = []
 

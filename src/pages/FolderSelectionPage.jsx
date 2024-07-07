@@ -1,13 +1,18 @@
 import React from 'react';
 
-function FolderSelectionPage()
+function FolderSelectionPage(props)
 {
   const loadTodosFromFolder = () => asyncLoadTodosFromFolder();
 
   const asyncLoadTodosFromFolder = async () =>
   {
     const result = await electronAPI.loadTodosFromFolder();
-    console.log(result);
+
+    if (result)
+    {
+      props.onFolderPicked();
+      props.onTodoItemsLoaded(result);
+    }
   }
 
   return (

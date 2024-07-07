@@ -1,12 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import FolderSelectionPage from "./pages/FolderSelectionPage.jsx";
 import TodoPage from "./pages/TodoPage.jsx";
 
-function Root() {
+function Root()
+{
+  const [folderPicked, setFolderPicked] = useState(false);
+  const [todoItems, setTodoItems] = useState([]);
+
+  const onFolderPicked = () => setFolderPicked(true);
+  const onTodoItemsLoaded = (items) => setTodoItems(items);
+
   return (
     <div>
       <div className="topbar"></div>
-      <FolderSelectionPage />
+      {!folderPicked ? <FolderSelectionPage onFolderPicked={onFolderPicked} onTodoItemsLoaded={onTodoItemsLoaded} /> : <TodoPage todoItems={todoItems} />}
     </div>
   );
 }
