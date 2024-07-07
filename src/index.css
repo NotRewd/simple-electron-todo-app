@@ -20,10 +20,18 @@ h2 {
 
 .main {
   display: flex;
-  height: 100vh;
+  height: 95vh;
+}
+
+.topbar {
+  -webkit-app-region: drag;
+  height: 5vh;
+  width: 100%;
 }
 
 .sidebar {
+  display: flex;
+  flex-direction: column;
   width: 250px;
   margin: 25px;
   backdrop-filter: blur(10px);
@@ -36,14 +44,24 @@ h2 {
   color: dodgerblue;
 }
 
+.sidebar-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 5px;
+}
+
 .content {
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .button {
   display: flex;
   align-items: center;
-  gap: 20px;
+  justify-content: space-between;
+  gap: 10px;
   background-color: lightgray;
   color: white;
   height: 30px;
@@ -51,23 +69,41 @@ h2 {
   border-radius: 5px;
   border: none;
   font-weight: bold;
+  align-self: center;
 }
 
 .button:hover {
   background-color: rgb(191, 191, 191);
 }
 
+.button:active {
+  background-color: rgb(156, 156, 156);
+}
+
 .todo-list {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   padding: 0;
   margin: 0;
   list-style: none;
+  overflow-y: scroll;
+  max-height: 100%;
+  scrollbar-width: none;
 }
 
 .todo-list-item {
+  border: none;
   border-bottom: 1px solid #ccc;
-  padding: 5px 0px;
+  padding: 5px;
+}
+
+.todo-list-item:hover {
+  background-color: lightgray;
+}
+
+.todo-list-item:active {
+  background-color: rgb(191, 191, 191);
 }
 
 .todo-list-item:last-child {
@@ -90,6 +126,37 @@ h2 {
   font-size: 14px;
   line-height: 1.5;
   font-weight: 400;
+}
+
+.new-todo-icon {
+  font-size: large;
+}
+
+.todo-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin: 25px;
+  padding: 10px 30px;
+}
+
+.todo-input {
+  color: black;
+  border: none;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  border-bottom: 2px solid #ccc;
+  flex-grow: 0;
+}
+
+.todo-textarea {
+  color: black;
+  border: none;
+  font-size: 16px;
+  font-weight: normal;
+  flex-grow: 1;
+  resize: none;
 }
 
 .no-todo-content {
