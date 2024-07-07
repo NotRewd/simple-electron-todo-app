@@ -51,6 +51,25 @@ h2 {
   gap: 5px;
 }
 
+.folder-selection-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 95vh;
+}
+
+.folder-selection-text {
+  font-size: 20px;
+  font-weight: bold;
+  color: #ccc;
+}
+
+.todo-page {
+  display: flex;
+  height: 95vh;
+}
+
 .content {
   flex-grow: 1;
   display: flex;
