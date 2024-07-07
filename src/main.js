@@ -1,14 +1,42 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { readdirSync, readFileSync } = require('fs');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
+async function handleLoadTodosFromFolder () {
+  const { canceled, filePaths } = await dialog.showOpenDialog(
+    {
+      properties: ['openDirectory']
+    }
+  );
+
+  if (!canceled) {
+    const directoryPath = filePaths[0];
+    const files = readdirSync(directoryPath);
+
+    let todosJson = []
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      if (file.endsWith('.json')) {
+        const filePath = directoryPath + '/' + file;
+        const fileContent = readFileSync(filePath, 'utf8');
+        const todos = JSON.parse(fileContent);
+        todosJson = todosJson.concat(todos);
+      }
+    }
+
+    return todosJson
+  }
+}
+
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
+    width: 1000,
     height: 600,
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
@@ -24,7 +52,10 @@ const createWindow = () => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
+app.whenReady().then(() =>
+{
+  ipcMain.handle('dialog:loadTodosFromFolder', handleLoadTodosFromFolder);
+
   createWindow();
 
   // On OS X it's common to re-create a window in the app when the

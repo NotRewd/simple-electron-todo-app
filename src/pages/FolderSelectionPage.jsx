@@ -2,17 +2,18 @@ import React from 'react';
 
 function FolderSelectionPage()
 {
-  const openFolder = () => asyncOpenFolder();
+  const loadTodosFromFolder = () => asyncLoadTodosFromFolder();
 
-  const asyncOpenFolder = async () =>
+  const asyncLoadTodosFromFolder = async () =>
   {
-    console.log("Open folder");
+    const result = await electronAPI.loadTodosFromFolder();
+    console.log(result);
   }
 
   return (
     <div className="folder-selection-page">
       <p className="folder-selection-text">No folder currently opened</p>
-      <button className="button" onClick={openFolder}>Open a folder</button>
+      <button className="button" onClick={loadTodosFromFolder}>Open a folder</button>
     </div>
   );
 }

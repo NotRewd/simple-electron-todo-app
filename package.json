@@ -1,6 +1,11 @@
 {
   "name": "todo-app",
   "productName": "todo-app",
+  "browser": {
+    "fs": false,
+    "os": false,
+    "path": false
+  },
   "version": "1.0.0",
   "description": "A simple electron todo app",
   "main": ".webpack/main",
