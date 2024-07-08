@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import TodoList from '../components/TodoList.jsx'
 import TodoContent from '../components/TodoContent.jsx'
 import NoTodoContent from '../components/NoTodoContent.jsx'
-import { CgAdd } from "react-icons/cg";
+import { CgAdd, CgFile } from "react-icons/cg";
 
 function TodoPage(props)
 {
@@ -64,9 +64,14 @@ function TodoPage(props)
             activeTodoIndex={activeTodoIndex} />
         </div>
         <div className="sidebar-footer">
-            <button className="button" onClick={handleCreateNewTodo}>
+            <button className="footer-button" onClick={handleCreateNewTodo}>
               <p>New Todo</p>
               <CgAdd className="button-icon" />
+            </button>
+          
+            <button className="footer-button" onClick={() => electronAPI.saveTodos(todoItems)}>
+              <p>Save Todos</p>
+              <CgFile className="button-icon" />
             </button>
           </div>
       </div>

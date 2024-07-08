@@ -13,7 +13,7 @@ function TodoContent(props)
     setTodoContent(props.todoItem.content);
   }, [props.todoItem]);
 
-  const handleDelete = () => props.onDelete();;
+  const handleDelete = () => props.onDelete();
 
   return (
     <div className="todo-content">
@@ -40,8 +40,9 @@ function TodoContent(props)
         }}
       />
       <div className="todo-buttons">
-        <button className="todo-button" onClick={handleDelete}>
-          <CgTrash />
+        <button className="footer-button" onClick={handleDelete}>
+          <p>Delete</p>
+          <CgTrash className="button-icon" />
         </button>
       </div>
     </div>

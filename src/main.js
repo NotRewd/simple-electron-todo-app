@@ -12,8 +12,6 @@ if (require('electron-squirrel-startup')) {
 const handleFileSave = () =>
 {
   mainWindow.webContents.send("requestTodos");
-
-  console.log("Sending request for todos");
 };
 
 const saveTodos = (event, todos) =>
@@ -40,8 +38,6 @@ const saveTodos = (event, todos) =>
       writeFileSync(filePath, fileContent, 'utf8');
     }
   }
-
-  console.log("Todos saved ", todos);
 }
 
 async function handleLoadTodosFromFolder () {

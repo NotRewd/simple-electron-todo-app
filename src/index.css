@@ -31,7 +31,9 @@ h2 {
 
 .sidebar {
   display: flex;
+  position: relative;
   flex-direction: column;
+  justify-content: space-between;
   width: 250px;
   margin: 25px;
   backdrop-filter: blur(10px);
@@ -46,6 +48,12 @@ h2 {
 
 .sidebar-content {
   display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 75px 25px 50px 25px;
   flex-direction: column;
   flex-grow: 1;
   gap: 5px;
@@ -54,6 +62,7 @@ h2 {
 .sidebar-footer {
   display: flex;
   justify-content: space-evenly;
+  margin: 0px -30px;
 }
 
 .folder-selection-page {
@@ -96,6 +105,23 @@ h2 {
   align-self: center;
 }
 
+.footer-button {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  border: none;
+  color: gray;
+  background-color: transparent;
+}
+
+.footer-button:hover {
+  color: rgb(94, 94, 94);
+}
+
+.footer-button:active {
+  color: black;
+}
+
 .button:hover {
   background-color: rgb(191, 191, 191);
 }
@@ -112,7 +138,6 @@ h2 {
   margin: 0;
   list-style: none;
   overflow-y: scroll;
-  max-height: inherit;
   scrollbar-width: none;
 }
 
@@ -195,14 +220,6 @@ h2 {
   align-items: center;
   justify-content: flex-end;
   gap: 10px;
-}
-
-.todo-button {
-  border: none;
-  background-color: transparent;
-  color: #ccc;
-  font-size: 24px;
-  padding: 0;
 }
 
 .todo-button:hover {
