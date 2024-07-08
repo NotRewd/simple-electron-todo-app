@@ -9,5 +9,6 @@ jobs:
         with:
           node-version: '20'
       - run: npm install
-      - run: npm install electron-forge
+      - run: npm install electron-forge --save-dev
+      - run: npm install electron-prebuilt-compile --save-dev
       - run: npm run make
