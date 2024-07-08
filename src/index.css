@@ -51,6 +51,11 @@ h2 {
   gap: 5px;
 }
 
+.sidebar-footer {
+  display: flex;
+  justify-content: space-evenly;
+}
+
 .folder-selection-page {
   display: flex;
   flex-direction: column;
@@ -151,7 +156,7 @@ h2 {
   font-weight: 400;
 }
 
-.new-todo-icon {
+.button-icon {
   font-size: large;
 }
 

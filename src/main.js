@@ -1,11 +1,47 @@
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
-const { readdirSync, readFileSync, writeFileSync } = require('fs');
+const { app, BrowserWindow, Menu, ipcMain, dialog } = require('electron');
+const { readdirSync, readFileSync, writeFileSync, unlinkSync } = require('fs');
 
 let todoFolder = '';
+let mainWindow = null;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
+}
+
+const handleFileSave = () =>
+{
+  mainWindow.webContents.send("requestTodos");
+
+  console.log("Sending request for todos");
+};
+
+const saveTodos = (event, todos) =>
+{
+  if (todos)
+  {
+    const folders = readdirSync(todoFolder);
+
+    for (let i = 0; i < folders.length; i++)
+    {
+      const folder = folders[i];
+      if (folder.startsWith('todo-') && folder.endsWith('.json'))
+      {
+        const filePath = todoFolder + '/' + folder;
+        unlinkSync(filePath);
+      }
+    }
+
+    for (let i = 0; i < todos.length; i++)
+    {
+      const todo = todos[i];
+      const filePath = todoFolder + '/todo-' + i + '.json';
+      const fileContent = JSON.stringify(todo);
+      writeFileSync(filePath, fileContent, 'utf8');
+    }
+  }
+
+  console.log("Todos saved ", todos);
 }
 
 async function handleLoadTodosFromFolder () {
@@ -24,7 +60,7 @@ async function handleLoadTodosFromFolder () {
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       if (file.endsWith('.json')) {
-        const filePath = directoryPath + '/' + file;
+        const filePath = todoFolder + '/' + file;
         const fileContent = readFileSync(filePath, 'utf8');
         const todos = JSON.parse(fileContent);
         todosJson = todosJson.concat(todos);
@@ -37,7 +73,7 @@ async function handleLoadTodosFromFolder () {
 
 const createWindow = () => {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 1000,
     height: 600,
     webPreferences: {
@@ -46,6 +82,105 @@ const createWindow = () => {
     titleBarStyle: "hidden",
     titleBarOverlay: true,
   });
+
+  const { app, Menu } = require('electron')
+
+  const isMac = process.platform === 'darwin'
+
+  const template = [
+    // { role: 'appMenu' }
+    ...(isMac
+      ? [{
+          label: "Simple Todo App",
+          submenu: [
+            { role: 'about' },
+            { type: 'separator' },
+            { role: 'services' },
+            { type: 'separator' },
+            { role: 'hide' },
+            { role: 'hideOthers' },
+            { role: 'unhide' },
+            { type: 'separator' },
+            { role: 'quit' }
+          ]
+        }]
+      : []),
+    {
+      label: 'File',
+      submenu: [
+        {
+          label: 'Save',
+          click: handleFileSave
+        },
+        isMac ? { role: 'close' } : { role: 'quit' }
+      ]
+    },
+    {
+      label: 'Edit',
+      submenu: [
+        { role: 'undo' },
+        { role: 'redo' },
+        { type: 'separator' },
+        { role: 'cut' },
+        { role: 'copy' },
+        { role: 'paste' },
+        ...(isMac
+          ? [
+              { role: 'pasteAndMatchStyle' },
+              { role: 'delete' },
+              { role: 'selectAll' },
+              { type: 'separator' },
+              {
+                label: 'Speech',
+                submenu: [
+                  { role: 'startSpeaking' },
+                  { role: 'stopSpeaking' }
+                ]
+              }
+            ]
+          : [
+              { role: 'delete' },
+              { type: 'separator' },
+              { role: 'selectAll' }
+            ])
+      ]
+    },
+    {
+      label: 'View',
+      submenu: [
+        { role: 'reload' },
+        { role: 'forceReload' },
+        { role: 'toggleDevTools' },
+        { type: 'separator' },
+        { role: 'resetZoom' },
+        { role: 'zoomIn' },
+        { role: 'zoomOut' },
+        { type: 'separator' },
+        { role: 'togglefullscreen' }
+      ]
+    },
+    {
+      label: 'Window',
+      submenu: [
+        { role: 'minimize' },
+        { role: 'zoom' },
+        ...(isMac
+          ? [
+              { type: 'separator' },
+              { role: 'front' },
+              { type: 'separator' },
+              { role: 'window' }
+            ]
+          : [
+              { role: 'close' }
+            ])
+      ]
+    }
+  ]
+
+  const menu = Menu.buildFromTemplate(template);
+
+  Menu.setApplicationMenu(menu);
 
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
@@ -57,7 +192,7 @@ const createWindow = () => {
 app.whenReady().then(() =>
 {
   ipcMain.handle('dialog:loadTodosFromFolder', handleLoadTodosFromFolder);
-  ipcMain.on('todosRecieved', onTodosRecieved);
+  ipcMain.on('saveTodos', saveTodos);
 
   createWindow();
 
@@ -70,21 +205,7 @@ app.whenReady().then(() =>
   });
 });
 
-const onTodosRecieved = (event, todos) =>
-{
-  if (todos)
-  {
-    for (let i = 0; i < todos.length; i++)
-    {
-      const todo = todos[i];
-      const filePath = todoFolder + '/todo-' + i + '.json';
-      const fileContent = JSON.stringify(todo);
-      writeFileSync(filePath, fileContent, 'utf8');
-    }
-  }
-}
-
 app.on('window-all-closed', () =>
 {
-    app.quit();
+  app.quit();
 });

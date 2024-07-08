@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import TodoList from '../components/TodoList.jsx'
-import NewTodoButton from '../components/NewTodoButton.jsx'
 import TodoContent from '../components/TodoContent.jsx'
 import NoTodoContent from '../components/NoTodoContent.jsx'
+import { CgAdd } from "react-icons/cg";
 
 function TodoPage(props)
 {
   const [todoItems, setTodoItems] = useState([]);
   const [activeTodoIndex, setActiveTodoIndex] = useState(-1);
+
+  useEffect(() =>
+  {
+    electronAPI.onTodosRequested(() =>
+    {
+      electronAPI.saveTodos(todoItems);
+    });
+  }, [todoItems]);
 
   useEffect(() =>
   {
@@ -54,9 +62,13 @@ function TodoPage(props)
           <TodoList todoItems={todoItems}
             onTodoSelected={setActiveTodoIndex}
             activeTodoIndex={activeTodoIndex} />
-          
-          <NewTodoButton onClick={handleCreateNewTodo}/>
         </div>
+        <div className="sidebar-footer">
+            <button className="button" onClick={handleCreateNewTodo}>
+              <p>New Todo</p>
+              <CgAdd className="button-icon" />
+            </button>
+          </div>
       </div>
 
       <div className="content">
