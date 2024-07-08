@@ -1,5 +1,5 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
-const { readdirSync, readFileSync } = require('fs');
+const { readdirSync, readFileSync, writeFileSync } = require('fs');
 
 let todoFolder = '';
 
@@ -57,6 +57,7 @@ const createWindow = () => {
 app.whenReady().then(() =>
 {
   ipcMain.handle('dialog:loadTodosFromFolder', handleLoadTodosFromFolder);
+  ipcMain.on('todosRecieved', onTodosRecieved);
 
   createWindow();
 
@@ -69,14 +70,21 @@ app.whenReady().then(() =>
   });
 });
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
+const onTodosRecieved = (event, todos) =>
+{
+  if (todos)
+  {
+    for (let i = 0; i < todos.length; i++)
+    {
+      const todo = todos[i];
+      const filePath = todoFolder + '/todo-' + i + '.json';
+      const fileContent = JSON.stringify(todo);
+      writeFileSync(filePath, fileContent, 'utf8');
+    }
   }
-});
+}
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.
+app.on('window-all-closed', () =>
+{
+    app.quit();
+});

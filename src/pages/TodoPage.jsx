@@ -28,7 +28,7 @@ function TodoPage(props)
     setTodoItems(newItems);
   };
 
-  const createNewTodo = () =>
+  const handleCreateNewTodo = () =>
   {
     const item = {
       title: 'New Todo',
@@ -37,19 +37,36 @@ function TodoPage(props)
 
     setTodoItems([...todoItems, item]);
   }
+
+  const handleDeleteTodo = () =>
+  {
+    const newItems = [...todoItems];
+    newItems.splice(activeTodoIndex, 1);
+    setTodoItems(newItems);
+    setActiveTodoIndex(-1);
+  }
   
   return (
     <div className="todo-page">
       <div className="sidebar">
         <h2 className="sidebar-header">Todos</h2>
         <div className="sidebar-content">
-          <TodoList todoItems={todoItems} onTodoSelected={setActiveTodoIndex}/>
-          <NewTodoButton onClick={createNewTodo}/>
+          <TodoList todoItems={todoItems}
+            onTodoSelected={setActiveTodoIndex}
+            activeTodoIndex={activeTodoIndex} />
+          
+          <NewTodoButton onClick={handleCreateNewTodo}/>
         </div>
       </div>
 
       <div className="content">
-        {activeTodoIndex !== -1 ? <TodoContent key={todoItems[activeTodoIndex].id} todoItem={todoItems[activeTodoIndex]} onTitleChanged={handleOnTitleChanged} onContentChanged={handleOnContentChanged} /> : <NoTodoContent />}
+        {activeTodoIndex !== -1 ?
+          <TodoContent key={todoItems[activeTodoIndex].id}
+            todoItem={todoItems[activeTodoIndex]}
+            onTitleChanged={handleOnTitleChanged}
+            onContentChanged={handleOnContentChanged}
+            onDelete={handleDeleteTodo} /> :
+          <NoTodoContent />}
       </div>
     </div>
   )

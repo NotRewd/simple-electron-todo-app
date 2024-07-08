@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react';
+import { CgTrash } from "react-icons/cg";
 
 function TodoContent(props)
 {
@@ -11,6 +12,8 @@ function TodoContent(props)
     setTodoTitle(props.todoItem.title);
     setTodoContent(props.todoItem.content);
   }, [props.todoItem]);
+
+  const handleDelete = () => props.onDelete();;
 
   return (
     <div className="todo-content">
@@ -36,6 +39,11 @@ function TodoContent(props)
           props.onContentChanged(event.target.value);
         }}
       />
+      <div className="todo-buttons">
+        <button className="todo-button" onClick={handleDelete}>
+          <CgTrash />
+        </button>
+      </div>
     </div>
   )
 }
