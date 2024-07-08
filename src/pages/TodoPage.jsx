@@ -7,12 +7,26 @@ import NoTodoContent from '../components/NoTodoContent.jsx'
 function TodoPage(props)
 {
   const [todoItems, setTodoItems] = useState([]);
-  const [selectedTodo, setSelectedTodo] = useState(null);
+  const [activeTodoIndex, setActiveTodoIndex] = useState(-1);
 
   useEffect(() =>
   {
     setTodoItems(props.todoItems);
   }, [props.todoItems]);
+
+  const handleOnTitleChanged = (value) =>
+  {
+    const newItems = [...todoItems];
+    newItems[activeTodoIndex].title = value;
+    setTodoItems(newItems);
+  };
+
+  const handleOnContentChanged = (value) =>
+  {
+    const newItems = [...todoItems];
+    newItems[activeTodoIndex].content = value;
+    setTodoItems(newItems);
+  };
 
   const createNewTodo = () =>
   {
@@ -29,13 +43,13 @@ function TodoPage(props)
       <div className="sidebar">
         <h2 className="sidebar-header">Todos</h2>
         <div className="sidebar-content">
-          <TodoList todoItems={todoItems} onTodoSelected={setSelectedTodo}/>
+          <TodoList todoItems={todoItems} onTodoSelected={setActiveTodoIndex}/>
           <NewTodoButton onClick={createNewTodo}/>
         </div>
       </div>
 
       <div className="content">
-        {selectedTodo ? <TodoContent key={selectedTodo.id} todoItem={selectedTodo} /> : <NoTodoContent />}
+        {activeTodoIndex !== -1 ? <TodoContent key={todoItems[activeTodoIndex].id} todoItem={todoItems[activeTodoIndex]} onTitleChanged={handleOnTitleChanged} onContentChanged={handleOnContentChanged} /> : <NoTodoContent />}
       </div>
     </div>
   )

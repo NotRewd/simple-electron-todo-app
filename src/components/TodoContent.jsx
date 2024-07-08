@@ -19,14 +19,22 @@ function TodoContent(props)
         className="todo-input"
         placeholder="Title"
         value={todoTitle}
-        onChange={(event) => setTodoTitle(event.target.value)}
+        onChange={(event) =>
+        {
+          setTodoTitle(event.target.value);
+          props.onTitleChanged(event.target.value);
+        }}
       />
       <textarea
         type="text"
         className="todo-textarea"
         placeholder="What needs to be done?"
         value={todoContent}
-        onChange={(event) => setTodoContent(event.target.value)}
+        onChange={(event) =>
+        {
+          setTodoContent(event.target.value);
+          props.onContentChanged(event.target.value);
+        }}
       />
     </div>
   )

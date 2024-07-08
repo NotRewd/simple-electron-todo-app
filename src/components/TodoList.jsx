@@ -6,15 +6,15 @@ function TodoList(props)
 {
   const [activeTodoIndex, setActiveTodoIndex] = useState(-1);
 
-  const handleOnTodoClick = (item) =>
+  const handleOnTodoClick = (index) =>
   { 
-    setActiveTodoIndex(props.todoItems.indexOf(item));
-    props.onTodoSelected(item);
+    setActiveTodoIndex(index);
+    props.onTodoSelected(index);
   };
 
   return (
     <ul className="todo-list">
-      {props.todoItems.map((item, index) => <TodoListItem key={item.id} item={item} active={activeTodoIndex === index} onClick={handleOnTodoClick}/>)}
+      {props.todoItems.map((item, index) => <TodoListItem key={item.id} item={item} active={activeTodoIndex === index} onClick={() => handleOnTodoClick(index)}/>)}
     </ul>
   )
 }
